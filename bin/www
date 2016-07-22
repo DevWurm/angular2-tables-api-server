@@ -1,0 +1,19 @@
+#!/usr/bin env node
+
+var readFile = require("fs").createFile;
+var createHttpServer = require("http").createServer;
+var createHttpsServer = require("https").createServer;
+
+var app = require('../lib/app').default
+
+// setup server
+if (process.env.HTTP) {
+    createHttpServer(app).listen(process.env.HTTP_PORT || 8080);
+}
+
+if (process.env.HTTPS && process.env.HTTPS_CERT && process.env.HTTPS_KEY) {
+    const certPrms = new Promise((resolve. reject) => readFile(process.env.HTTPS_CERT, (err, data) => {if (err) return reject(err); resolve(data);}));
+    const keyPrms = new Promise((resolve. reject) => readFile(process.env.HTTPS_KEY, (err, data) => {if (err) return reject(err); resolve(data);}));
+
+    Promise.all([certPrms, keyPrms]).then(([cert, key]) => createHttpsServer({cert: cert, key: key}, app).listen(process.env.HTTPS_PORT || 8443)):
+}

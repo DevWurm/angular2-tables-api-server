@@ -12,8 +12,8 @@ if (process.env.HTTP) {
 }
 
 if (process.env.HTTPS && process.env.HTTPS_CERT && process.env.HTTPS_KEY) {
-    const certPrms = new Promise((resolve. reject) => readFile(process.env.HTTPS_CERT, (err, data) => {if (err) return reject(err); resolve(data);}));
-    const keyPrms = new Promise((resolve. reject) => readFile(process.env.HTTPS_KEY, (err, data) => {if (err) return reject(err); resolve(data);}));
+    const certPrms = new Promise((resolve, reject) => readFile(process.env.HTTPS_CERT, (err, data) => {if (err) return reject(err); resolve(data);}));
+    const keyPrms = new Promise((resolve, reject) => readFile(process.env.HTTPS_KEY, (err, data) => {if (err) return reject(err); resolve(data);}));
 
-    Promise.all([certPrms, keyPrms]).then(([cert, key]) => createHttpsServer({cert: cert, key: key}, app).listen(process.env.HTTPS_PORT || 8443)):
+    Promise.all([certPrms, keyPrms]).then(([cert, key]) => createHttpsServer({cert: cert, key: key}, app).listen(process.env.HTTPS_PORT || 8443));
 }

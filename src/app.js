@@ -9,3 +9,8 @@ const app = express();
 app.use("/api/v1/", v1ApiRoutes);
 
 // setup error handler and fallbacks
+app.use(function(err, req, res, next) {
+    
+})
+
+export default app;

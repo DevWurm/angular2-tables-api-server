@@ -1,7 +1,7 @@
 ## Create main application component
     ### Setup versioning
     * all the parts of the main application rest below `src`
-    * to allow correct, flexible and failsave versioning of your API place all components of your application into a subfolder, which is named after the version, which the components belong to
+    * to allow correct, flexible and failsave versioning of your API place all components of your application into a subfolder, which is named after the main version, which the components belong to
     * the management of the different versions is then done in the main `src/app.js` file
     * this approach leads to the disadvantage of code duplication among the different API versions, but brings the advantage of stable versioning
     * maybe an approach including linking between files of different versions can reduce the disdvantage
@@ -27,6 +27,7 @@
 
     More on API versioning:
     * [Evan Hahn: Express.js: How to version your API](http://freecontent.manning.com/wp-content/uploads/express-js-how-to-version-your-api.pdf)
+    * [Vinay Sahni: Best Practices for Designing a Pragmatic RESTful API](http://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api#versioning)
 
     ### Create main application component
     * the entry point into an express based application is an express [application object](https://expressjs.com/en/4x/api.html#app)
@@ -46,6 +47,10 @@
     
         ##### Managing versions
         * maintain multiple versions and applying routes is done in the same process
-        * because all the application files (routes, middleware, etc.) is defined seperately for each version, setting up a version is done by applying the routers and other middleware for this version under a subtree for this version
+        * because all the application files (routes, middleware, etc.) is defined seperately for each main version, setting up a version is done by applying the routers and other middleware for this version under a subtree for this version
+        * to address subversions of a main version, it is possible for the client to include a custom version header; this brings a good tradeoff between a stable versioning, an
+        easy to use API and an easy update mechanism (even without a specific subversion, the API should be save to use, because the major version is described in the URL, but
+        small changes can be included easily by an subversion which can be automatically used [or specifically avoided] by the clients)
+
         
     <!-- TODO: Error handling, middleware -->

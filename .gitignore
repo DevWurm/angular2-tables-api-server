@@ -2,3 +2,5 @@
 .importjs.json
 node_modules
 lib/**
+.nyc_output/**
+coberage/**

@@ -22,14 +22,23 @@ suite("ArticleRange", function() {
         const to = "f";
 
         const excludes = ["d"];
+        const excludes2 = ["a"];
 
         assert.doesNotThrow(() => {new ArticleRange(from, to, excludes)});
+        assert.doesNotThrow(() => {new ArticleRange(from, to, excludes2, true)});
 
         const range = new ArticleRange(from, to, excludes);
+        const range2 = new ArticleRange(from, to, excludes, true);
 
         assert.equal(range.from, from)
         assert.equal(range.to, to)
         assert.isTrue(range.excludes.has("d"));
+        assert.isFalse(range.all)
+
+        assert.equal(range2.from, undefined)
+        assert.equal(range2.to, undefined)
+        assert.isTrue(range2.excludes.has("d"))
+        assert.isTrue(range2.all)
     })
 
     test("isInside", function() {
@@ -81,6 +90,16 @@ suite("ArticleRange", function() {
         assert.isFalse(range.isOverlapping(range4))
     })
 
+    test("isOverlapping with 'all' ranges", function() {
+        const allRange = new ArticleRange(null, null, [], true);
+        const allRange2 = new ArticleRange(null, null, [], true);
+        const regularRange = new ArticleRange("a", "c", []);
+
+        assert.isTrue(allRange.isOverlapping(allRange2))
+        assert.isTrue(allRange.isOverlapping(regularRange))
+        assert.isTrue(regularRange.isOverlapping(allRange))
+    })
+
     test("Errors on incorrect merge", function() {
         const from ="c";
         const to = "f";
@@ -120,5 +139,23 @@ suite("ArticleRange", function() {
         assert.equal(mergedRange.to, "j")
         assert.isTrue(mergedRange.excludes.has("d"))
         assert.isTrue(mergedRange.excludes.has("i"), "Merged mergedRange should include excludes from other range")
+    })
+
+    test("merge with all ranges", function() {
+        const allRange = new ArticleRange(null, null, [], true);
+        const allRange2 = new ArticleRange(null, null, [], true);
+        const regularRange = new ArticleRange("a", "c", ["b"]);
+
+        const mergedRange = allRange.merge(allRange2);
+        const mergedRange2 = allRange.merge(regularRange);
+
+        assert.equal(mergedRange.from, undefined)
+        assert.equal(mergedRange.to, undefined)
+        assert.isTrue(mergedRange.all)
+
+        assert.equal(mergedRange2.from, undefined)
+        assert.equal(mergedRange2.to, undefined)
+        assert.isTrue(mergedRange2.excludes.has("b"))
+        assert.isTrue(mergedRange2.all)
     })
 })

@@ -1,4 +1,5 @@
 import Ordering from "./Ordering";
+import SortingProperty from "./OrderingProperty";
 import ArticleRange from "./ArticleRange";
 
 /**
@@ -68,17 +69,35 @@ export function parseExcludes(query) {
  *
  * @param query {String} 'sort' query String
  *
- * @return {Array} array of objects containing sorting property name and Ordering enum value (ASC, DESC)
+ * @return {Array} array of objects containing SortingProperty enum value and Ordering enum value (ASC, DESC)
  */
 export function parseSorting(query) {
     return query.split(',').filter(entry => entry !== "").map(prop => {
-        const matchResult = /([\+\-]{0,1})([\w\d]+)/.exec(prop);
+        const matchResult = /([\+\-]{0,1})([\w\-]+)([\w\d\-]+){0,1}/.exec(prop);
 
         if (!matchResult) throw new Error("Can't parse sorting query: Incorrect query String");
 
-        return {
-            property: matchResult[2],
-            ordering: (matchResult[1] === "-") ? Ordering.DESC : Ordering.ASC
-        };
+        const result = {};
+        switch(matchResult[2]) {
+            case "article": result.property = SortingProperty.ARTICLE; break;
+            case "date": result.property = SortingProperty.DATE; break;
+            case "count-article": 
+                if (!matchResult[3]) throw new Error("Can't parse sorting query: No option for count-article sorting provided");
+                result.property = SortingProperty.COUNT_ARTICLE;
+                result.article = matchResult[3]; 
+                break;
+            case "count-date":
+                if (!matchResult[3]) throw new Error("Can't parse sorting query: No option for count-date sorting provided");
+                result.property = SortingProperty.COUNT_DATE;
+                try {
+                    result.date = new Date(matchResult[3]);
+                } catch (e) {
+                    throw new Error("Can't parse sorting query: Incorrect date option for count-date sorting");
+                }
+                break;
+            default: throw new Error("Can't parse sorting query: Incorrect sorting specified");
+        }
+
+        result.ordering = (matchResult[1] == "-") ? Ordering.DESC : Ordering.ASC;
     })
 }

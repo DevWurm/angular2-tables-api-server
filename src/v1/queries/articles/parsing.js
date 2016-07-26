@@ -2,6 +2,27 @@ import Ordering from "./Ordering";
 import ArticleRange from "./ArticleRange";
 
 /**
+ * parses the query information for a request object to the 'articles' API endpoint
+ *
+ * @access public
+ *
+ * @param req {Request} Express request object
+ *
+ * @return {Object} object containing the requested ranges in the ranges property and the requested sorting in the sorting property
+ */
+export default function parseRequest(req) {
+    const result = {};
+
+    result.sorting = (req.query.sort) ? parseSorting(req.query.sort) : [];
+
+    const excludes = (req.query.exclude) ? parseExcludes(req.query.exclude) : [];
+    result.ranges = (req.query.range) ? parseRanges(req.query.range, excludes) : [new ArticleRange(null, null, excludes, true)];
+
+    return result;
+}
+
+
+/**
  * parses range query Object / array
  *
  * @access public
@@ -36,8 +57,7 @@ export function parseRanges(query, excludes) {
  * @return {[String]} array of Strings containing the excluded articles
  */
 export function parseExcludes(query) {
-    if (!query) return [];
-    return query.split(',')
+    return query.split(',').filter(entry => entry !== "");
 }
 
 
@@ -50,11 +70,11 @@ export function parseExcludes(query) {
  *
  * @return {Array} array of objects containing sorting property name and Ordering enum value (ASC, DESC)
  */
-export function parseSortQuery(query) {
-    return query.split(',').map(prop => {
+export function parseSorting(query) {
+    return query.split(',').filter(entry => entry !== "").map(prop => {
         const matchResult = /([\+\-]{0,1})([\w\d]+)/.exec(prop);
 
-        if (!matchResult) throw new Error("Can't parse sorting property: Incorrect property String");
+        if (!matchResult) throw new Error("Can't parse sorting query: Incorrect query String");
 
         return {
             property: matchResult[2],

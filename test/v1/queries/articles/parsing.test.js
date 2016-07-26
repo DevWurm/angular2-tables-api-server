@@ -1,4 +1,6 @@
-import {parseRanges, parseExcludes} from "../../../../src/v1/queries/articles/parsing";
+import parseRequest, {parseRanges, parseExcludes, parseSorting} from "../../../../src/v1/queries/articles/parsing";
+import ArticleRange from "../../../../src/v1/queries/articles/ArticleRange";
+import Ordering from "../../../../src/v1/queries/articles/Ordering";
 import {assert} from "chai";
 
 suite("parsing", function() {
@@ -78,5 +80,75 @@ suite("parsing", function() {
 
              assert.deepEqual(parseExcludes(query), [])
         })
+    })
+
+    suite("parseSorting", function() {
+        test("parse single ascending sort query", function() {
+            const query = "+test";
+            const query2 = "test";
+
+            assert.deepEqual(parseSorting(query), [{property: "test", ordering: Ordering.ASC}])
+            assert.deepEqual(parseSorting(query2), [{property: "test", ordering: Ordering.ASC}])
+        })
+
+        test("parse single descending sort query", function() {
+            const query = "-test";
+
+            assert.deepEqual(parseSorting(query), [{property: "test", ordering: Ordering.DESC}])
+        })
+
+        test("parse multiple property sort query", function() {
+            const query = "-test,test2,+test3";
+
+            assert.deepEqual(parseSorting(query), [{property: "test", ordering: Ordering.DESC}, {property: "test2", ordering: Ordering.ASC}, {property: "test3", ordering: Ordering.ASC}])
+        })
+
+        test("correct result on empty query string", function() {
+            const query = "";
+
+            assert.deepEqual(parseSorting(query), []);
+        })
+
+        test("correct error on incorrect query string", function() {
+            const query = "$%&/(";
+
+            assert.throws(() => {parseSorting(query)}, /Can't parse sorting query: Incorrect query String/);
+        })
+    })
+
+    suite("parseRequest", function() {
+        test("parse request containing only sorting", function() {
+            const req = {
+                query: {
+                    sort: "-test,test2"
+                }
+            }
+
+            assert.deepEqual(parseRequest(req), {ranges: [new ArticleRange(null, null, [], true)], sorting: [{property: "test", ordering: Ordering.DESC}, {property: "test2", ordering: Ordering.ASC}]})
+        })
+
+        test("parse request containing only ranges", function() {
+            const req = {
+                query: {
+                    range: {
+                        from: "a",
+                        to: "b"
+                    }
+                }
+            }
+
+            assert.deepEqual(parseRequest(req), {ranges: [new ArticleRange("a", "b", [])], sorting: []})
+        })
+
+        test("parse request containing only excludes", function() {
+            const req = {
+                query: {
+                    exclude: "b,d"
+                }
+            }
+
+            assert.deepEqual(parseRequest(req), {ranges: [new ArticleRange(null, null, ["b", "d"], true)], sorting: []})
+        })
+
     })
 })

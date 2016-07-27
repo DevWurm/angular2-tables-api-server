@@ -52,5 +52,19 @@
         easy to use API and an easy update mechanism (even without a specific subversion, the API should be save to use, because the major version is described in the URL, but
         small changes can be included easily by an subversion which can be automatically used [or specifically avoided] by the clients)
 
+    #### Using middleware
+    * middleware functions are functions, which get hooked into the request-handling chain, to modify the request and response objects of the currently handled request
+    * middleware can be hooked in by using the [`app.use(MIDDLEWARE...)`](https://expressjs.com/en/4x/api.html#app.use) (or the [`router.use(MIDDLEWARE...)`](https://expressjs.com/en/4x/api.html#router.use)) function
+    * when adding a middleware by just calling `app.use(MIDDLEWARE)`, it is used at every request passing the current application (or router)
+    * it is also possible to add middleware by using `app.use(PATH, MIDDLEWARE...)`; in this case the middleware is only hooked into requests to the given `PATH` or a subtree of this `PATH`; this middleware functions get called after the global midlewares; the matching section of the requests path is stripped from the requests path, so following middleware gets it's own subtree of the path-tree
+    * when adding middleware, which accepts an error handler, this middleware gets called after every other defined middleware, or if another middleware passes an error
+    
+    More on Middleware:
+    * [Express reference](https://expressjs.com/en/guide/using-middleware.html)
+    
+    #### Using routers
+
+
+
         
-    <!-- TODO: Error handling, middleware -->
+    <!-- TODO: Error handling -->

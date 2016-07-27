@@ -1,5 +1,5 @@
 import Ordering from "./Ordering";
-import SortingProperty from "./OrderingProperty";
+import SortingProperty from "./SortingProperty";
 import ArticleRange from "./ArticleRange";
 
 /**
@@ -18,6 +18,9 @@ export default function parseRequest(req) {
 
     const excludes = (req.query.exclude) ? parseExcludes(req.query.exclude) : [];
     result.ranges = (req.query.range) ? parseRanges(req.query.range, excludes) : [new ArticleRange(null, null, excludes, true)];
+
+    result.index = (req.query.index) ? Number(req.query.index) : undefined;
+    result.count = (req.query.count) ? Number(req.query.count) : undefined;
 
     return result;
 }
@@ -80,12 +83,6 @@ export function parseSorting(query) {
         const result = {};
         switch(matchResult[2]) {
             case "article": result.property = SortingProperty.ARTICLE; break;
-            case "date": result.property = SortingProperty.DATE; break;
-            case "count-article": 
-                if (!matchResult[3]) throw new Error("Can't parse sorting query: No option for count-article sorting provided");
-                result.property = SortingProperty.COUNT_ARTICLE;
-                result.article = matchResult[3]; 
-                break;
             case "count-date":
                 if (!matchResult[3]) throw new Error("Can't parse sorting query: No option for count-date sorting provided");
                 result.property = SortingProperty.COUNT_DATE;

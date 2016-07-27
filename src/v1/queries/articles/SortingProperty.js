@@ -3,7 +3,5 @@
  */
 export default {
     ARTICLE: 0,
-    DATE: 1,
-    COUNT_ARTICLE: 2,
-    COUNT_DATE: 3
+    COUNT_DATE: 1
 }

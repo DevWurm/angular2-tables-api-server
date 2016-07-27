@@ -8,9 +8,14 @@ const app = express();
 // setup routes
 app.use("/api/v1/", v1ApiRoutes);
 
-// setup error handler and fallbacks
-app.use(function(err, req, res, next) {
-    
-})
+// Handle 404
+app.use(function(req, res) {
+    res.status(404).json({error: "Page not found"}).end();
+});
 
+// Handle 500
+app.use(function(err, req, res, next) {
+    res.status(err.status || 500).json({error: (err.message || "Internal server error")}).end();
+});
+  
 export default app;

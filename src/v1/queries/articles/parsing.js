@@ -76,7 +76,7 @@ export function parseExcludes(query) {
  */
 export function parseSorting(query) {
     return query.split(',').filter(entry => entry !== "").map(prop => {
-        const matchResult = /([\+\-]{0,1})([\w\-]+)([\w\d\-]+){0,1}/.exec(prop);
+        const matchResult = /([+-]?)([\w-]+):?([\w\d-]+)?/.exec(prop);
 
         if (!matchResult) throw new Error("Can't parse sorting query: Incorrect query String");
 
@@ -87,7 +87,7 @@ export function parseSorting(query) {
                 if (!matchResult[3]) throw new Error("Can't parse sorting query: No option for count-date sorting provided");
                 result.property = SortingProperty.COUNT_DATE;
                 try {
-                    result.date = new Date(matchResult[3]);
+                    result.date = matchResult[3];
                 } catch (e) {
                     throw new Error("Can't parse sorting query: Incorrect date option for count-date sorting");
                 }
@@ -96,5 +96,7 @@ export function parseSorting(query) {
         }
 
         result.ordering = (matchResult[1] == "-") ? Ordering.DESC : Ordering.ASC;
+
+        return result;
     })
 }

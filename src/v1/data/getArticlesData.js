@@ -80,7 +80,7 @@ function buildSortQuery(querySorting) {
     const sorts = (querySorting.length < 1) ? {article: 1} : querySorting.map(sortOption => {
         const result = {};
         if (sortOption.property == SortingProperty.COUNT_DATE) {
-            result[sortOption.date.toString()] = sortOption.ordering;
+            result[sortOption.date] = sortOption.ordering;
         } else {
             result["article"] = sortOption.ordering;
         }

@@ -1,9 +1,9 @@
-import parseRequest from "../queries/articles/parsing";
+import parseRequest from "../queries/counts/parsing";
 import getCurrentCollection from "../database/getCurrentCollection";
-import getArticlesData from "../data/getArticlesData";
+import getCountData from "../data/getCountData";
 
 /**
- * Handler for the articles get route
+ * Handler for the counts get route
  * Parses the qury and responds with the querried data
  *
  * @access public
@@ -12,11 +12,11 @@ import getArticlesData from "../data/getArticlesData";
  * @param res {Response} Express response object for the current request
  * @param next {Function} Express next middleware function
  */
-export default function getArticles (req, res, next) {
+export default function getCounts (req, res, next) {
     const queries = parseRequest(req);
     
     getCurrentCollection().then(col => {
-        return getArticlesData(queries, col);
+        return getCountData(queries, col);
     }).then(data => {
         res.json(data);
         res.end()

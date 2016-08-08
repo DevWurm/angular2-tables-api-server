@@ -3,7 +3,7 @@ import SortingProperty from "./SortingProperty";
 import ArticleRange from "./ArticleRange";
 
 /**
- * parses the query information for a request object to the 'articles' API endpoint
+ * parses the query information for a request object to the 'counts' API endpoint
  *
  * @access public
  *
@@ -32,7 +32,7 @@ export default function parseRequest(req) {
  * @access public
  *
  * @param query {Object / [Object]} Object if only one range specified, otherwise array of query objects
- * @param excludes {[String]} Array of excluded articles
+ * @param excludes {[String]} Array of excluded counts
  *
  * @return {[ArticleRange]} Array of ArticleRange objects
  */
@@ -58,7 +58,7 @@ export function parseRanges(query, excludes) {
  *
  * @param query {String} 'exclude' query String
  *
- * @return {[String]} array of Strings containing the excluded articles
+ * @return {[String]} array of Strings containing the excluded counts
  */
 export function parseExcludes(query) {
     return query.split(',').filter(entry => entry !== "");

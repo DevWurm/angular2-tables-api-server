@@ -1,8 +1,8 @@
 import express from "express";
-import getArticles from "../handlers/getArticles";
+import getCounts from "../handlers/getCounts";
 
 const router = express.Router();
 
-router.get("/articles", getArticles)
+router.get("/counts", getCounts)
 
 export default router;

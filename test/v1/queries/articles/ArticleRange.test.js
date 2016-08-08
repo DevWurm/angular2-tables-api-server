@@ -1,4 +1,4 @@
-import ArticleRange from "../../../../src/v1/queries/articles/ArticleRange";
+import ArticleRange from "../../../../src/v1/queries/counts/ArticleRange";
 import {assert} from "chai";
 
 suite("ArticleRange", function() {

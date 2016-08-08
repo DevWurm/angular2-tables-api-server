@@ -1,7 +1,7 @@
-import SortingProperty from "../queries/articles/SortingProperty";
+import SortingProperty from "../queries/counts/SortingProperty";
 
 /**
- * collects all articles from the specified DB collection, which match the specified queries
+ * collects all counts from the specified DB collection, which match the specified queries
  *
  * @access public
  *
@@ -10,7 +10,7 @@ import SortingProperty from "../queries/articles/SortingProperty";
  *
  * @return {Promise} Promise resolved with the Object representation of the requested data or rejected with errors while querying the database
  */
-export default function getArticlesData(queries, col) {
+export default function getCountData(queries, col) {
     return new Promise((resolve, reject) => {
         col.aggregate(buildDBQuery(queries), (err, data) => {
             if (err) return reject(err);

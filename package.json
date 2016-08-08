@@ -10,7 +10,7 @@
     "clean": "rm -rf lib",
     "build": "npm run clean && babel src -d lib",
     "build:dev": "npm run clean && babel src -d lib --source-maps \"both\"",
-    "start": "node ./bin/www"
+    "start": "npm run build && node ./bin/www"
   },
   "repository": {
     "type": "git",

@@ -63,6 +63,10 @@
     * [Express reference](https://expressjs.com/en/guide/using-middleware.html)
     
     #### Using routers
+    * [Routers](https://expressjs.com/en/4x/api.html#router) are a special kind of middleware
+    * they can be set up with routes and appropriate handlers
+    * after that the router can be hooked into the regular request-handling chain of an app and handle all requests, which match a route defined on them
+    * to set up routes routers provide the same methods (one for each HTTP method and an `all` method) like an application object
 
 
 

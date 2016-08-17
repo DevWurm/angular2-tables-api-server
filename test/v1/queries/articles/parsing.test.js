@@ -1,8 +1,8 @@
-import parseRequest, {parseRanges, parseExcludes, parseSorting} from "../../../../src/v1/queries/counts/parsing";
-import ArticleRange from "../../../../src/v1/queries/counts/ArticleRange";
-import Ordering from "../../../../src/v1/queries/counts/Ordering";
+import parseRequest, {parseRanges, parseExcludes, parseSorting} from "../../../../src/v1/handlers/queries/parsing";
+import ArticleRange from "../../../../src/v1/handlers/queries/ArticleRange";
+import Ordering from "../../../../src/v1/handlers/queries/article-sorting/Ordering";
 import {assert} from "chai";
-import SortingProperty from "../../../../src/v1/queries/counts/SortingProperty";
+import SortingProperty from "../../../../src/v1/handlers/queries/article-sorting/SortingProperty";
 
 suite("parsing", function() {
     suite("parseRanges", function() {

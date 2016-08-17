@@ -1,6 +1,6 @@
-import parseRequest from "../queries/counts/parsing";
+import parseRequest from "./queries/parsing";
 import getCurrentCollection from "../database/getCurrentCollection";
-import getArticlesData from "../data/getArticlesData";
+import getArticlesData from "./data/getArticlesData";
 
 /**
  * Handler for the counts get route
@@ -13,7 +13,7 @@ import getArticlesData from "../data/getArticlesData";
  * @param next {Function} Express next middleware function
  */
 export default function getArticles (req, res, next) {
-    const queries = parseRequest(req);
+    const queries = parseRequest(req.query);
     
     getCurrentCollection().then(col => {
         return getArticlesData(queries, col);

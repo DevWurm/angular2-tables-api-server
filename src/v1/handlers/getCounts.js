@@ -1,6 +1,6 @@
-import parseRequest from "../queries/counts/parsing";
+import parseRequest from "./queries/parsing";
 import getCurrentCollection from "../database/getCurrentCollection";
-import getCountData from "../data/getCountData";
+import getCountData from "./data/getCountData";
 
 /**
  * Handler for the counts get route
@@ -13,7 +13,7 @@ import getCountData from "../data/getCountData";
  * @param next {Function} Express next middleware function
  */
 export default function getCounts (req, res, next) {
-    const queries = parseRequest(req);
+    const queries = parseRequest(req.query);
     
     getCurrentCollection().then(col => {
         return getCountData(queries, col);

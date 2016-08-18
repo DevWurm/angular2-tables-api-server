@@ -39,6 +39,9 @@ function buildDBQuery(queries): [Object] {
   // add sort query to result query
   resultQuery.push(buildSortQuery(queries.sorting));
 
+  // add project query to result query
+  resultQuery.push(buildProjectQuery());
+
   // add skip query to result query
   if (queries.index) {
     resultQuery.push({
@@ -101,4 +104,12 @@ function buildSortQuery(querySorting): Object {
   };
 
   return sortQuery;
+}
+
+function buildProjectQuery(): Object {
+  return {
+    $project: {
+      article: 1
+    }
+  };
 }

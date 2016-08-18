@@ -18,6 +18,11 @@ import { SortingOrder } from "../../shared/sorting/sorting-order";
  * @return {Promise} Promise resolved with the Object representation of the requested data or rejected with errors while querying the database
  */
 export default function getCountData(queries: QueryParseResult, col: MongoCollection) {
+  // short-circuit request if no elements are requested
+  if (queries.count == 0) {
+    return Promise.resolve({});
+  }
+
   return new Promise((resolve, reject) => {
     col.aggregate(buildDBQuery(queries), (err, data) => {
       if (err) return reject(err);

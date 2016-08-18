@@ -1,7 +1,11 @@
 import {Sorting} from "./sorting";
 
 export class SortingSelection {
-  constructor(private _sortings: Array<Sorting>) {}
+  _sortings: Array<Sorting>;
+
+  constructor(sortings: Array<Sorting>) {
+    this._sortings = sortings;
+  }
 
   get sortings(): Array<Sorting> {
     return this._sortings;

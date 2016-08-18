@@ -1,22 +1,23 @@
 // @flow
 
-import Ordering from "../../queries/article-sorting/Ordering";
-import SortingProperty from "../../queries/article-sorting/SortingProperty";
 import { ArticleRange } from "./counts-selection/article-range";
 import { SelectionMode } from "./counts-selection/selection-mode";
 import type { ESelectionMode } from "./counts-selection/selection-mode";
 import { ArticleSelection } from "./counts-selection/article-selection";
+import { SortingSelection } from "./counts-sorting/sorting-selection";
+import { Sorting } from "./counts-sorting/sorting";
+import { SortingOrder } from "../../shared/sorting/sorting-order";
 
 export type RequestQuery = {
   mode?: string,
   range?: [{from: string, to: string}],
-  sort?: string,
+  sorting?: [string],
   index?: string,
   count?: string
 }
 
 export type QueryParseResult = {
-  sorting: [any],
+  sorting: SortingSelection,
   selection: ArticleSelection,
   index?: number,
   count?: number
@@ -33,7 +34,7 @@ export type QueryParseResult = {
 export default function parseRequest(query: RequestQuery): QueryParseResult {
   const result = {};
 
-  result.sorting = (query.sort) ? parseSorting(query.sort) : [];
+  result.sorting = (query.sorting) ? parseSorting(query.sorting) : new SortingSelection([]);
 
   let ranges = (query.range) ? parseRanges(query.range) : [];
   let mode = (query.mode) ? parseMode(query.mode) : SelectionMode.EXCLUDING;
@@ -86,32 +87,14 @@ function parseMode(query: string): ESelectionMode {
  *
  * @return {Array} array of objects containing SortingProperty enum value and Ordering enum value (ASC, DESC)
  */
-function parseSorting(query: string) {
-  return query.split(',').filter(entry => entry !== "").map(prop => {
-    const matchResult = /([+-]?)([\w-]+):?([\w\d-]+)?/.exec(prop);
+function parseSorting(query: [string]) {
+  let sortings = query.map(sortingStr => {
+    let match = /([+-]?)([\w\d-]+)/.exec(sortingStr);
 
-    if (!matchResult) throw new Error("Can't parse sorting query: Incorrect query String");
+    if (!match) throw new Error("Incorrect sorting definition");
 
-    const result = {};
-    switch (matchResult[2]) {
-      case "article":
-        result.property = SortingProperty.ARTICLE;
-        break;
-      case "count-date":
-        if (!matchResult[3]) throw new Error("Can't parse sorting query: No option for count-date sorting provided");
-        result.property = SortingProperty.COUNT_DATE;
-        try {
-          result.date = matchResult[3];
-        } catch (e) {
-          throw new Error("Can't parse sorting query: Incorrect date option for count-date sorting");
-        }
-        break;
-      default:
-        throw new Error("Can't parse sorting query: Incorrect sorting specified");
-    }
-
-    result.ordering = (matchResult[1] == "-") ? Ordering.DESC : Ordering.ASC;
-
-    return result;
+    return new Sorting(match[2], match[1] == '-' ? SortingOrder.DESC : SortingOrder.ASC);
   })
+
+  return new SortingSelection(sortings);
 }

@@ -1,15 +1,22 @@
 // @flow
 
-import {SortingOrder} from "../../../../shared/sorting/sorting-order.enum";
+import type { ESortingOrder } from "../../../shared/sorting/sorting-order";
+
 
 export class Sorting {
-  constructor(private _property: string, private _order: SortingOrder) {}
+  _property: string;
+  _order: ESortingOrder;
+
+  constructor(property: string, order: ESortingOrder) {
+    this._order = order;
+    this._property = property;
+  }
 
   get property(): string {
     return this._property;
   }
 
-  get order(): SortingOrder {
+  get order(): ESortingOrder {
     return this._order;
   }
 }

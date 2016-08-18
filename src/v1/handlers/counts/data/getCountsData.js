@@ -5,6 +5,8 @@ import type { QueryParseResult } from "../queries/parsing";
 import type { MongoCollection } from "../../../database/getCurrentCollection";
 import { ArticleSelection } from "../queries/counts-selection/article-selection";
 import { SelectionMode } from "../queries/counts-selection/selection-mode";
+import { SortingSelection } from "../queries/counts-sorting/sorting-selection";
+import { SortingOrder } from "../../shared/sorting/sorting-order";
 
 /**
  * collects all counts from the specified DB collection, which match the specified queries
@@ -73,27 +75,13 @@ function buildMatchQuery(selection: ArticleSelection): Object {
   }
 }
 
-function buildSortQuery(querySorting): Object {
-  // get sorting rules and build query object which sorts correctls, when used by the $sort operator
-  const sorts = (querySorting.length < 1) ? { article: 1 } : querySorting.map(sortOption => {
-    const result = {};
-    if (sortOption.property == SortingProperty.COUNT_DATE) {
-      result[sortOption.date] = sortOption.ordering;
-    } else {
-      result["article"] = sortOption.ordering;
-    }
+function buildSortQuery(sorting: SortingSelection): Object {
+  // get sorting rules and build query object which sorts corrects, when used by the $sort operator
+  const sorts = sorting.sortings.map(sorting => {
+    return {[sorting.property]: sorting.order == SortingOrder.DESC ? -1 : 1};
+  }).reduce((prev, curr) => Object.assign(prev, curr), {});
 
-    return result;
-  }).reduce((acc, sortOption) => {
-    for (const key of sortOption.keys()) {
-      acc[key] = sortOption[key];
-    }
-    return acc;
-  }, {});
-
-  const sortQuery = {
+  return {
     $sort: sorts
   };
-
-  return sortQuery;
 }

@@ -1,4 +1,4 @@
-import parseRequest from "../counts/queries/parsing";
+import parseRequest from "./queries/parsing";
 import getCurrentCollection from "../../database/getCurrentCollection";
 import getArticlesData from "./data/getArticlesData";
 

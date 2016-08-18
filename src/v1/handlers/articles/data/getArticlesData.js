@@ -1,10 +1,8 @@
 // @flow
 
-import SortingProperty from "../../queries/article-sorting/SortingProperty";
-import type { QueryParseResult } from "../../counts/queries/parsing";
+import type { QueryParseResult } from "./queries/parsing";
 import type { MongoCollection } from "../../../database/getCurrentCollection";
-import { ArticleSelection } from "../../counts/queries/counts-selection/article-selection";
-import { SelectionMode } from "../../counts/queries/counts-selection/selection-mode";
+import { SortingOrder } from "../../../../../lib/v1/handlers/shared/sorting/sorting-order";
 
 /**
  * collects all articles from the specified DB collection, which match the specified queries
@@ -16,7 +14,7 @@ import { SelectionMode } from "../../counts/queries/counts-selection/selection-m
  *
  * @return {Promise} Promise resolved with the Object representation of the requested data or rejected with errors while querying the database
  */
-export default function getCountData(queries: QueryParseResult, col: MongoCollection) {
+export default function getArticlesData(queries: QueryParseResult, col: MongoCollection) {
   // short-circuit request if no elements are requested
   if (queries.count == 0) {
     return Promise.resolve({});
@@ -32,9 +30,6 @@ export default function getCountData(queries: QueryParseResult, col: MongoCollec
 
 function buildDBQuery(queries): [Object] {
   let resultQuery = [];
-
-  // add match query to result query
-  resultQuery.push(buildMatchQuery(queries.selection));
 
   // add sort query to result query
   resultQuery.push(buildSortQuery(queries.sorting));
@@ -59,51 +54,12 @@ function buildDBQuery(queries): [Object] {
   return resultQuery;
 }
 
-function buildMatchQuery(selection: ArticleSelection): Object {
-  // build filter query, matching all the ranges, if connected with 'or'
-  const ranges = selection.ranges.map(range => {
-    return {
-      $and: [
-        { article: { $gte: range.beginning } },
-        { article: { $lte: range.end } }
-      ]
-    }
-  });
-
-  if (selection.mode == SelectionMode.EXCLUDING) {
-    return {
-      $match: (ranges.length > 0) ? { $nor: ranges } : {}
-    }
-  } else {
-    return {
-      $match: (ranges.length > 0) ? { $or: ranges } : {article: null}
+function buildSortQuery(sortingQuery): Object {
+  return {
+    $sort: {
+      article: sortingQuery == SortingOrder.DESC ? -1 : 1
     }
   }
-}
-
-function buildSortQuery(querySorting): Object {
-  // get sorting rules and build query object which sorts correctls, when used by the $sort operator
-  const sorts = (querySorting.length < 1) ? { article: 1 } : querySorting.map(sortOption => {
-    const result = {};
-    if (sortOption.property == SortingProperty.COUNT_DATE) {
-      result[sortOption.date] = sortOption.ordering;
-    } else {
-      result["article"] = sortOption.ordering;
-    }
-
-    return result;
-  }).reduce((acc, sortOption) => {
-    for (const key of sortOption.keys()) {
-      acc[key] = sortOption[key];
-    }
-    return acc;
-  }, {});
-
-  const sortQuery = {
-    $sort: sorts
-  };
-
-  return sortQuery;
 }
 
 function buildProjectQuery(): Object {

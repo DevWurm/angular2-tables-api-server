@@ -1,6 +1,5 @@
 // @flow
 
-import SortingProperty from "../../queries/article-sorting/SortingProperty";
 import type { QueryParseResult } from "../queries/parsing";
 import type { MongoCollection } from "../../../database/getCurrentCollection";
 import { ArticleSelection } from "../queries/counts-selection/article-selection";

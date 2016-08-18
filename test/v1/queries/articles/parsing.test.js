@@ -1,4 +1,4 @@
-import parseRequest, {parseRanges, parseExcludes, parseSorting} from "../../../../src/v1/handlers/queries/parsing";
+import parseRequest, {parseRanges, parseExcludes, parseSorting} from "../../../../src/v1/handlers/counts/queries/parsing";
 import ArticleRange from "../../../../src/v1/handlers/queries/ArticleRange";
 import Ordering from "../../../../src/v1/handlers/queries/article-sorting/Ordering";
 import {assert} from "chai";

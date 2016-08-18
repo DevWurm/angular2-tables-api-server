@@ -1,10 +1,10 @@
 // @flow
 
-import SortingProperty from "../queries/article-sorting/SortingProperty";
+import SortingProperty from "../../queries/article-sorting/SortingProperty";
 import type { QueryParseResult } from "../queries/parsing";
-import type { MongoCollection } from "../../database/getCurrentCollection";
-import { ArticleSelection } from "../queries/article-selection/article-selection";
-import { SelectionMode } from "../queries/article-selection/selection-mode";
+import type { MongoCollection } from "../../../database/getCurrentCollection";
+import { ArticleSelection } from "../queries/counts-selection/article-selection";
+import { SelectionMode } from "../queries/counts-selection/selection-mode";
 
 /**
  * collects all counts from the specified DB collection, which match the specified queries

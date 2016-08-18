@@ -1,7 +1,7 @@
 import express from "express";
-import getCounts from "../handlers/getCounts";
-import getArticles from "../handlers/getArticles";
-import getDates from "../handlers/getDates";
+import getCounts from "../handlers/counts/getCounts";
+import getArticles from "../handlers/articles/getArticles";
+import getDates from "../handlers/dates/getDates";
 
 
 const router = express.Router();

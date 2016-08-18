@@ -1,6 +1,6 @@
 // @flow
 
-import type { MongoCollection } from "../../database/getCurrentCollection";
+import type { MongoCollection } from "../../../database/getCurrentCollection";
 
 /**
  * collects dates array from the specified DB dates collection, which match the specified queries

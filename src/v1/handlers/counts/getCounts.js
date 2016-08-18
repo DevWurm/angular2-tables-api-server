@@ -1,6 +1,6 @@
 import parseRequest from "./queries/parsing";
-import getCurrentCollection from "../database/getCurrentCollection";
-import getCountData from "./data/getCountData";
+import getCurrentCollection from "../../database/getCurrentCollection";
+import getCountData from "./data/getCountsData";
 
 /**
  * Handler for the counts get route

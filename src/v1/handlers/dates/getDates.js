@@ -1,4 +1,4 @@
-import { getCurrentDatesCollection } from "../database/getCurrentCollection";
+import { getCurrentDatesCollection } from "../../database/getCurrentCollection";
 import getDatesData from "./data/getDatesData";
 
 /**

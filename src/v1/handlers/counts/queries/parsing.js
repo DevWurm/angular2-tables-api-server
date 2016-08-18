@@ -1,11 +1,11 @@
 // @flow
 
-import Ordering from "./article-sorting/Ordering";
-import SortingProperty from "./article-sorting/SortingProperty";
-import { ArticleRange } from "./article-selection/article-range";
-import { SelectionMode } from "./article-selection/selection-mode";
-import type { ESelectionMode } from "./article-selection/selection-mode";
-import { ArticleSelection } from "./article-selection/article-selection";
+import Ordering from "../../queries/article-sorting/Ordering";
+import SortingProperty from "../../queries/article-sorting/SortingProperty";
+import { ArticleRange } from "./counts-selection/article-range";
+import { SelectionMode } from "./counts-selection/selection-mode";
+import type { ESelectionMode } from "./counts-selection/selection-mode";
+import { ArticleSelection } from "./counts-selection/article-selection";
 
 export type RequestQuery = {
   mode?: string,

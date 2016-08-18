@@ -34,7 +34,7 @@ export type QueryParseResult = {
 export default function parseRequest(query: RequestQuery): QueryParseResult {
   const result = {};
 
-  result.sorting = (query.sorting) ? parseSorting(query.sorting) : new SortingSelection([]);
+  result.sorting = (query.sorting) ? parseSorting(query.sorting) : new SortingSelection([new Sorting('article', SortingOrder.ASC)]);
 
   let ranges = (query.range) ? parseRanges(query.range) : [];
   let mode = (query.mode) ? parseMode(query.mode) : SelectionMode.EXCLUDING;

@@ -1,6 +1,6 @@
 // @flow
 
-import type { QueryParseResult } from "./queries/parsing";
+import type { QueryParseResult } from "../queries/parsing";
 import type { MongoCollection } from "../../../database/getCurrentCollection";
 import { SortingOrder } from "../../../../../lib/v1/handlers/shared/sorting/sorting-order";
 

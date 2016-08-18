@@ -1,6 +1,7 @@
 // @flow
 
 import { SortingOrder } from "../../shared/sorting/sorting-order";
+import type { ESortingOrder } from "../../shared/sorting/sorting-order";
 
 export type RequestQuery = {
   sorting?: string,
@@ -9,7 +10,7 @@ export type RequestQuery = {
 }
 
 export type QueryParseResult = {
-  sorting: SortingOrder,
+  sorting: ESortingOrder,
   index?: number,
   count?: number
 }

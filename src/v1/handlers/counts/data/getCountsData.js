@@ -34,6 +34,11 @@ export default function getCountData(queries: QueryParseResult, col: MongoCollec
 function buildDBQuery(queries): [Object] {
   let resultQuery = [];
 
+  // add filter (match against regex) to result query
+  if(queries.filter) {
+    resultQuery.push(buildFilterQuery(queries.filter));
+  }
+
   // add match query to result query
   resultQuery.push(buildMatchQuery(queries.selection));
 
@@ -55,6 +60,14 @@ function buildDBQuery(queries): [Object] {
   }
 
   return resultQuery;
+}
+
+function buildFilterQuery(filterQuery): Object {
+  return {
+    $match: {
+      article: {$regex: filterQuery}
+    }
+  }
 }
 
 function buildMatchQuery(selection: ArticleSelection): Object {

@@ -9,6 +9,7 @@ import { Sorting } from "./counts-sorting/sorting";
 import { SortingOrder } from "../../shared/sorting/sorting-order";
 
 export type RequestQuery = {
+  filter?: string,
   mode?: string,
   range?: [{from: string, to: string}],
   sorting?: [string],
@@ -17,6 +18,7 @@ export type RequestQuery = {
 }
 
 export type QueryParseResult = {
+  filter?: RegExp,
   sorting: SortingSelection,
   selection: ArticleSelection,
   index?: number,
@@ -33,6 +35,8 @@ export type QueryParseResult = {
  */
 export default function parseRequest(query: RequestQuery): QueryParseResult {
   const result = {};
+
+  result.filter = query.filter ? new RegExp(query.filter) : undefined;
 
   result.sorting = (query.sorting) ? parseSorting(query.sorting) : new SortingSelection([new Sorting('article', SortingOrder.ASC)]);
 

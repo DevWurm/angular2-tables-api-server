@@ -31,6 +31,11 @@ export default function getArticlesData(queries: QueryParseResult, col: MongoCol
 function buildDBQuery(queries): [Object] {
   let resultQuery = [];
 
+  // add filter (match against regex) to result query
+  if(queries.filter) {
+    resultQuery.push(buildFilterQuery(queries.filter));
+  }
+
   // add sort query to result query
   resultQuery.push(buildSortQuery(queries.sorting));
 
@@ -52,6 +57,14 @@ function buildDBQuery(queries): [Object] {
   }
 
   return resultQuery;
+}
+
+function buildFilterQuery(filterQuery): Object {
+  return {
+    $match: {
+      article: {$regex: filterQuery}
+    }
+  }
 }
 
 function buildSortQuery(sortingQuery): Object {

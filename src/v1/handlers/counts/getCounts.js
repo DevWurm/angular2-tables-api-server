@@ -1,6 +1,6 @@
 import parseRequest from "./queries/parsing";
-import getCurrentCollection from "../../database/getCurrentCollection";
 import getCountData from "./data/getCountsData";
+import { getESConnection } from "../../database/getESConnection";
 
 /**
  * Handler for the counts get route
@@ -15,9 +15,8 @@ import getCountData from "./data/getCountsData";
 export default function getCounts (req, res, next) {
     const queries = parseRequest(req.query);
     
-    getCurrentCollection().then(col => {
-        return getCountData(queries, col);
-    }).then(data => {
+    getCountData(queries, getESConnection())
+    .then(data => {
         res.json(data);
         res.end()
     }).catch(reason => {

@@ -21,7 +21,7 @@ import type { ElasticsearchConnection } from "../../../database/getESConnection"
 export default function getCountData(queries: QueryParseResult, { client, index, type }: ElasticsearchConnection) {
   // short-circuit request if no elements are requested
   if (queries.count == 0) {
-    return Promise.resolve({});
+    return Promise.resolve([]);
   }
 
   return client.search({

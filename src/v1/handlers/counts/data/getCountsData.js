@@ -34,7 +34,7 @@ export default function getCountData(queries: QueryParseResult, { client, index,
     from: queries.index,
     size: queries.count,
     body: buildDBQuery(queries)
-  });
+  }).then(data => data.hits.hits).then(hits => hits.map(hit => hit._source));
 }
 
 function buildDBQuery(queries): Object {
@@ -108,6 +108,8 @@ function buildSortQuery(sorting: SortingSelection): Object {
       return {
         "counts.count": {
           order: sorting.order == SortingOrder.DESC ? "desc" : "asc",
+          mode: "max",
+          nested_path: "counts",
           nested_filter: {
             bool: {
               must: { match: { "counts.date": dateFromProperty(sorting.property).toISOString() } }
@@ -127,5 +129,5 @@ function dateFromProperty(property: string): Date {
   const match = /(\d{4})-(\d{2})-(\d{2})-(\d{2})/.exec(property);
   if (!match) throw new Error("Incorrect date property specified");
 
-  return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]), Number(match[4]));
+  return new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3]), Number(match[4])));
 }

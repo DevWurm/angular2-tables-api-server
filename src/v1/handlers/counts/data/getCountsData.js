@@ -26,8 +26,6 @@ export default function getCountData(queries: QueryParseResult, { client, index,
     return Promise.resolve({});
   }
 
-  console.log(JSON.stringify(buildDBQuery(queries)));
-
   return client.search({
     index: index,
     type: type,
@@ -71,7 +69,7 @@ function buildSelectionQuery(selection: ArticleSelection): Object {
   const ranges = selection.ranges.map(range => {
     return {
       range: {
-        article: {
+        exact_article: {
           gte: range.beginning,
           lte: range.end
         }
@@ -102,7 +100,7 @@ function buildSortQuery(sorting: SortingSelection): Object {
   const sorts = sorting.sortings.map(sorting => {
     if (sorting.property == "article") {
       return {
-        article: sorting.order == SortingOrder.DESC ? "desc" : "asc",
+        exact_article: sorting.order == SortingOrder.DESC ? "desc" : "asc",
       }
     } else {
       return {

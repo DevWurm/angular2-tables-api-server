@@ -1,5 +1,6 @@
 // @flow
 import type { ElasticsearchConnection } from "../../../database/getESConnection";
+import { ISODateToSimpleDateString } from "../../shared/converting";
 
 
 /**
@@ -35,5 +36,5 @@ export default function getDatesData({ client, index, type }: ElasticsearchConne
         }
       }
     }
-  }).then(data => data.aggregations.dates.dates.buckets).then(buckets => buckets.map(bucket => bucket.key_as_string));
+  }).then(data => data.aggregations.dates.dates.buckets).then(buckets => buckets.map(bucket => bucket.key_as_string)).then(dates => dates.map(ISODateToSimpleDateString));
 }

@@ -6,6 +6,7 @@ import { SelectionMode } from "../queries/counts-selection/selection-mode";
 import { SortingSelection } from "../queries/counts-sorting/sorting-selection";
 import { SortingOrder } from "../../shared/sorting/sorting-order";
 import type { ElasticsearchConnection } from "../../../database/getESConnection";
+import { ISODateToSimpleDateString } from "../../shared/converting";
 
 /**
  * collects all counts from the specified DB, which match the specified queries
@@ -32,7 +33,17 @@ export default function getCountData(queries: QueryParseResult, { client, index,
     from: queries.index,
     size: queries.count,
     body: buildDBQuery(queries)
-  }).then(data => data.hits.hits).then(hits => hits.map(hit => hit._source));
+  }).then(data => data.hits.hits).then(hits => hits.map(hit => hit._source)).then(articles => articles.map(article => {
+    return {
+      article: article.article,
+      counts: article.counts.map(count => {
+        return {
+          date: ISODateToSimpleDateString(count.date),
+          count: count.count
+        }
+      })
+    }
+  }));
 }
 
 function buildDBQuery(queries): Object {

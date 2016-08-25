@@ -38,6 +38,7 @@
   },
   "dependencies": {
     "cors": "^2.7.1",
+    "dateformat": "^1.0.12",
     "elasticsearch": "^11.0.1",
     "express": "^4.14.0",
     "mongodb": "^2.2.4"

@@ -30,7 +30,7 @@ export default function getCountData(queries: QueryParseResult, { client, index,
     from: queries.index,
     size: queries.count,
     body: buildDBQuery(queries)
-  }).then(data => data.hits.hits).then(hits => hits.map(hit => hit._source));
+  }).then(data => data.hits.hits).then(hits => hits.map(hit => hit._source)).then(articles => articles.map(article => article.article));
 }
 
 function buildDBQuery(queries): Object {

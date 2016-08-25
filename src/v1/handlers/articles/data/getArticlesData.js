@@ -1,84 +1,70 @@
 // @flow
 
 import type { QueryParseResult } from "../queries/parsing";
-import type { MongoCollection } from "../../../database/getCurrentCollection";
 import { SortingOrder } from "../../../../../lib/v1/handlers/shared/sorting/sorting-order";
+import type { ElasticsearchConnection } from "../../../database/getESConnection";
+
 
 /**
- * collects all articles from the specified DB collection, which match the specified queries
+ * collects all articles from the specified DB, which match the specified queries
  *
  * @access public
  *
  * @param queries {Object} Object containing information about selected ranges and sorting
- * @param col {Collection} MongoDB collection object
+ *
+ * @param client {ElasticsearchClient} client which should be used for connections to ES
+ * @param index {string} Elasticsearch index, which should be used
+ * @param type {string} Elasticsearch type, which should be used
  *
  * @return {Promise} Promise resolved with the Object representation of the requested data or rejected with errors while querying the database
  */
-export default function getArticlesData(queries: QueryParseResult, col: MongoCollection) {
+export default function getCountData(queries: QueryParseResult, { client, index, type }: ElasticsearchConnection) {
   // short-circuit request if no elements are requested
   if (queries.count == 0) {
     return Promise.resolve({});
   }
 
-  return new Promise((resolve, reject) => {
-    col.aggregate(buildDBQuery(queries), (err, data) => {
-      if (err) return reject(err);
-      resolve(data);
-    });
-  });
+  return client.search({
+    index: index,
+    type: type,
+    from: queries.index,
+    size: queries.count,
+    body: buildDBQuery(queries)
+  }).then(data => data.hits.hits).then(hits => hits.map(hit => hit._source));
 }
 
-function buildDBQuery(queries): [Object] {
-  let resultQuery = [];
+function buildDBQuery(queries): Object {
+  const sourceFilter = {
+    _source: ['article']
+  };
 
-  // add filter (match against regex) to result query
-  if(queries.filter) {
-    resultQuery.push(buildFilterQuery(queries.filter));
-  }
+  const filter = (queries.filter) ? buildFilterQuery(queries.filter) : {};
 
-  // add sort query to result query
-  resultQuery.push(buildSortQuery(queries.sorting));
+  const query = {
+    query: {
+      bool: Object.assign({}, filter)
+    }
+  };
 
-  // add project query to result query
-  resultQuery.push(buildProjectQuery());
+  const sort = buildSortQuery(queries.sorting);
 
-  // add skip query to result query
-  if (queries.index) {
-    resultQuery.push({
-      $skip: Number(queries.index)
-    })
-  }
-
-  // add limit query to result query
-  if (queries.count) {
-    resultQuery.push({
-      $limit: Number(queries.count)
-    })
-  }
-
-  return resultQuery;
+  return Object.assign({}, sourceFilter, query, sort);
 }
 
-function buildFilterQuery(filterQuery): Object {
+function buildFilterQuery(filterQuery: string): Object {
   return {
-    $match: {
-      article: {$regex: filterQuery}
+    must: {
+      match: {
+        article: filterQuery
+      }
     }
   }
 }
 
 function buildSortQuery(sortingQuery): Object {
   return {
-    $sort: {
-      article: sortingQuery == SortingOrder.DESC ? -1 : 1
-    }
+    sort: [
+      {exact_article: sortingQuery == SortingOrder.DESC ? "desc" : "asc"}
+    ]
   }
-}
-
-function buildProjectQuery(): Object {
-  return {
-    $project: {
-      article: 1
-    }
-  };
 }

@@ -1,6 +1,6 @@
 import parseRequest from "./queries/parsing";
-import getCurrentCollection from "../../database/getCurrentCollection";
 import getArticlesData from "./data/getArticlesData";
+import { getESConnection } from "../../database/getESConnection";
 
 /**
  * Handler for the counts get route
@@ -14,13 +14,12 @@ import getArticlesData from "./data/getArticlesData";
  */
 export default function getArticles (req, res, next) {
     const queries = parseRequest(req.query);
-    
-    getCurrentCollection().then(col => {
-        return getArticlesData(queries, col);
-    }).then(data => {
-        res.json(data);
-        res.end()
-    }).catch(reason => {
+
+    getArticlesData(queries, getESConnection())
+      .then(data => {
+          res.json(data);
+          res.end()
+      }).catch(reason => {
         next(reason);
     })
 }

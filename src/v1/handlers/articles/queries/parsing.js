@@ -11,7 +11,7 @@ export type RequestQuery = {
 }
 
 export type QueryParseResult = {
-  filter?: RegExp,
+  filter?: string,
   sorting: ESortingOrder,
   index?: number,
   count?: number
@@ -27,7 +27,7 @@ export type QueryParseResult = {
  */
 export default function parseRequest(query: RequestQuery): QueryParseResult {
   return {
-    filter: query.filter ? new RegExp(query.filter) : undefined,
+    filter: query.filter ? query.filter : undefined,
     sorting: query.sorting == '-' ? SortingOrder.DESC : SortingOrder.ASC,
     index: (query.index) ? Number(query.index) : undefined,
     count: (query.count) ? Number(query.count) : undefined

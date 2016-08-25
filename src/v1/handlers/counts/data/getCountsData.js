@@ -8,7 +8,7 @@ import { SortingOrder } from "../../shared/sorting/sorting-order";
 import type { ElasticsearchConnection } from "../../../database/getESConnection";
 
 /**
- * collects all counts from the specified DB collection, which match the specified queries
+ * collects all counts from the specified DB, which match the specified queries
  *
  * @access public
  *

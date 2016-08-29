@@ -1,12 +1,13 @@
 .PHONY: all
-all: clean simple
+all: simple
 
-pretty: merge
+pretty: clean merge
 	grip dist/doc.md --export dist/doc.html
 	rm dist/*.md
 
-simple: merge
+simple: clean merge
 	pandoc dist/doc.md -s -o dist/doc.html
+	rm dist/*.md
 
 merge: dist toc
 	pandoc dist/*.md -o dist/doc.md

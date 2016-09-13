@@ -4,20 +4,22 @@
   "description": "Api-Server for the Wikiviews application.",
   "main": "./lib/server.js",
   "scripts": {
+    "clean": "rm -rf lib",
     "test": "mocha --recursive --ui tdd --compilers js:babel-core/register",
     "test:debug": "node-debug _mocha --recursive --ui tdd --compilers js:babel-core/register",
     "test:cover": "nyc --reporter=lcov npm run test",
-    "clean": "rm -rf lib",
+    "flow": "flow",
+    "flow:stop": "flow stop",
     "prebuild": "npm run clean",
     "build": "babel src -d lib",
     "prebuild:dev": "npm run prebuild",
     "build:dev": "babel src -d lib --source-maps \"both\"",
+    "prebuild:docker": "npm run build",
+    "build:docker": "docker build -t wikiviews-api-server:$(node -p -e 'require('./package.json').version') .",
     "prestart": "npm run build",
     "start": "node ./bin/www",
-    "flow": "flow",
-    "flow:stop": "flow stop",
-    "predocker": "npm run build",
-    "docker": "docker build -t wikiviews-api-server:$(node -p -e 'require('./package.json').version') ."
+    "prestart:docker": "npm run build:docker",
+    "start:docker": "$(node ./scripts/build-docker-run-command.js)"
   },
   "repository": {
     "type": "git",
@@ -42,6 +44,7 @@
     "chai": "3.5.0",
     "flow-bin": "0.30.0",
     "mocha": "2.5.3",
+    "node-inspector": "0.12.8",
     "nyc": "8.1.0"
   },
   "dependencies": {

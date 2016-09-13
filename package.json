@@ -8,11 +8,16 @@
     "test:debug": "node-debug _mocha --recursive --ui tdd --compilers js:babel-core/register",
     "test:cover": "nyc --reporter=lcov npm run test",
     "clean": "rm -rf lib",
-    "build": "npm run clean && babel src -d lib",
-    "build:dev": "npm run clean && babel src -d lib --source-maps \"both\"",
-    "start": "npm run build && node ./bin/www",
+    "prebuild": "npm run clean",
+    "build": "babel src -d lib",
+    "prebuild:dev": "npm run prebuild",
+    "build:dev": "babel src -d lib --source-maps \"both\"",
+    "prestart": "npm run build",
+    "start": "node ./bin/www",
     "flow": "flow",
-    "flow:stop": "flow stop"
+    "flow:stop": "flow stop",
+    "predocker": "npm run build",
+    "docker": "docker build -t wikiviews-api-server:$(node -p -e 'require('./package.json').version') ."
   },
   "repository": {
     "type": "git",
@@ -37,7 +42,7 @@
     "chai": "3.5.0",
     "flow-bin": "0.30.0",
     "mocha": "2.5.3",
-    "nyc": "7.1.0-candidate3"
+    "nyc": "8.1.0"
   },
   "dependencies": {
     "cors": "2.7.1",

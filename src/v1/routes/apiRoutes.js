@@ -1,13 +1,13 @@
 import express from "express";
-import getCounts from "../handlers/counts/getCounts";
 import getArticles from "../handlers/articles/getArticles";
+import getArticleNames from "../handlers/names/getArticleNames";
 import getDates from "../handlers/dates/getDates";
 
 
 const router = express.Router();
 
+router.get("/articles/names", getArticleNames);
+router.get("/articles/dates", getDates);
 router.get("/articles", getArticles);
-router.get("/counts", getCounts)
-router.get("/dates", getDates);
 
 export default router;

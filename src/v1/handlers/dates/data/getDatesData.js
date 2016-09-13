@@ -23,12 +23,12 @@ export default function getDatesData({ client, index, type }: ElasticsearchConne
       "aggs": {
         "dates": {
           "nested": {
-            "path": "counts"
+            "path": "views"
           },
           "aggs": {
             "dates": {
               "terms": {
-                "field": "counts.date",
+                "field": "views.date",
                 "size": 0
               }
             }

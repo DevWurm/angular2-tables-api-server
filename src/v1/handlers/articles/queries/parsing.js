@@ -1,23 +1,31 @@
 // @flow
 
+import { ArticleRange } from "./article-selection/article-range";
+import { SelectionMode } from "./article-selection/selection-mode";
+import type { ESelectionMode } from "./article-selection/selection-mode";
+import { ArticleSelection } from "./article-selection/article-selection";
+import { SortingSelection } from "./article-sorting/sorting-selection";
+import { Sorting } from "./article-sorting/sorting";
 import { SortingOrder } from "../../shared/sorting/sorting-order";
-import type { ESortingOrder } from "../../shared/sorting/sorting-order";
 
 export type RequestQuery = {
   filter?: string,
-  sorting?: string,
+  mode?: string,
+  range?: [{from: string, to: string}],
+  sorting?: [string],
   index?: string,
   count?: string
 }
 
 export type QueryParseResult = {
   filter?: string,
-  sorting: ESortingOrder,
+  sorting: SortingSelection,
+  selection: ArticleSelection,
   index?: number,
   count?: number
 }
 /**
- * parses the query information for a request object to the 'counts' API endpoint
+ * parses the query information for a request object to the 'articles' API endpoint
  *
  * @access public
  *
@@ -26,10 +34,71 @@ export type QueryParseResult = {
  * @return {Object} object containing the requested ranges in the ranges property and the requested sorting in the sorting property
  */
 export default function parseRequest(query: RequestQuery): QueryParseResult {
-  return {
-    filter: query.filter ? query.filter : undefined,
-    sorting: query.sorting == '-' ? SortingOrder.DESC : SortingOrder.ASC,
-    index: (query.index) ? Number(query.index) : undefined,
-    count: (query.count) ? Number(query.count) : undefined
+  const result = {};
+
+  result.filter = query.filter ? query.filter : undefined;
+
+  result.sorting = (query.sorting) ? parseSorting(query.sorting) : new SortingSelection([new Sorting('article', SortingOrder.ASC)]);
+
+  let ranges = (query.range) ? parseRanges(query.range) : [];
+  let mode = (query.mode) ? parseMode(query.mode) : SelectionMode.EXCLUDING;
+  result.selection = new ArticleSelection(ranges, mode);
+
+  result.index = (query.index) ? Number(query.index) : undefined;
+  result.count = (query.count) ? Number(query.count) : undefined;
+
+  return result;
+}
+
+
+/**
+ * parses range query array
+ *
+ * @access private
+ *
+ * @param query {[Object]} array of query objects
+ *
+ * @return {[ArticleRange]} Array of ArticleRange objects
+ */
+function parseRanges(query: [{from: string, to: string}]) {
+  return query.map(range => new ArticleRange(range.from, range.to));
+}
+
+/**
+ * parses a mode query string into the corresponding SelectionMode Enum value
+ *
+ * @access private
+ *
+ * @param query {String} query which specifies the the mode of the request regarding include or exclude semantics
+ *
+ * @return {ESelectionMode} SelectionMode enum value describing the requested mode (EXCLUDING if parsing is not successful)
+ */
+function parseMode(query: string): ESelectionMode {
+  switch (query) {
+    case 'including':
+      return SelectionMode.INCLUDING;
+    default:
+      return SelectionMode.EXCLUDING;
   }
+}
+
+/**
+ * parses 'sort' query string into a object representation
+ *
+ * @access private
+ *
+ * @param query {String} 'sort' query String
+ *
+ * @return {Array} array of objects containing SortingProperty enum value and Ordering enum value (ASC, DESC)
+ */
+function parseSorting(query: [string]) {
+  let sortings = query.map(sortingStr => {
+    let match = /([+-]?)([\w\d-]+)/.exec(sortingStr);
+
+    if (!match) throw new Error("Incorrect sorting definition");
+
+    return new Sorting(match[2], match[1] == '-' ? SortingOrder.DESC : SortingOrder.ASC);
+  });
+
+  return new SortingSelection(sortings);
 }

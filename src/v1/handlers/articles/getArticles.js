@@ -3,8 +3,8 @@ import getArticlesData from "./data/getArticlesData";
 import { getESConnection } from "../../database/getESConnection";
 
 /**
- * Handler for the counts get route
- * Parses the qury and responds with the querried data
+ * Handler for the articles get route
+ * Parses the query and responds with the queried data
  *
  * @access public
  *
@@ -14,12 +14,12 @@ import { getESConnection } from "../../database/getESConnection";
  */
 export default function getArticles (req, res, next) {
     const queries = parseRequest(req.query);
-
+    
     getArticlesData(queries, getESConnection())
-      .then(data => {
-          res.json(data);
-          res.end()
-      }).catch(reason => {
+    .then(data => {
+        res.json(data);
+        res.end()
+    }).catch(reason => {
         next(reason);
     })
 }

@@ -1,5 +1,4 @@
 // @flow
-
 import { Client } from "elasticsearch";
 
 export type ElasticsearchConnection = {
@@ -13,11 +12,11 @@ export type ElasticsearchClient = {
 }
 
 export function getESConnection(): ElasticsearchConnection {
-  const addr = process.env.DB_ADDR || "127.0.0.1";
-  const port = process.env.DB_PORT || "9200";
+  const addr = process.env.ES_ADDR || "localhost";
+  const port = process.env.ES_PORT || "9200";
 
-  const index = process.env.DB_INDEX || "pagecounts"
-  const type = process.env.DB_TYPE || "article";
+  const index = process.env.ES_INDEX || "pageviews";
+  const type = process.env.ES_TYPE || "article";
 
   return {
     client: new Client({host: `${addr}:${port}`}),

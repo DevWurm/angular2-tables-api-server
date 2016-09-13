@@ -8,4 +8,4 @@ export type ESelectionMode = number;
 export const SelectionMode = {
   INCLUDING: 0,
   EXCLUDING: 1
-}
+};

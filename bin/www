@@ -4,7 +4,7 @@ var readFile = require("fs").createFile;
 var createHttpServer = require("http").createServer;
 var createHttpsServer = require("https").createServer;
 
-var app = require('../lib/app').default
+var app = require('../lib/app').default;
 
 // setup server
 if (process.env.HTTP) {

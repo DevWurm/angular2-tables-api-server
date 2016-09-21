@@ -23,10 +23,10 @@ if (process.env.HTTPS && process.env.HTTPS_CERT && process.env.HTTPS_KEY) {
     resolve(data);
   }));
 
-  Promise.all([certPrms, keyPrms]).then(([cert, key]) => {
+  Promise.all([certPrms, keyPrms]).then(keypair => {
     createHttpsServer({
-      cert: cert,
-      key: key
+      cert: keypair[0],
+      key: keypair[1]
     }, app).listen(process.env.HTTPS_PORT || 8443, process.env.SERVER_ADDR, () => {
       console.log(`HTTPS Server is listening on ${process.env.SERVER_ADDR || ':'}:${process.env.HTTPS_PORT || 8443}`);
     })

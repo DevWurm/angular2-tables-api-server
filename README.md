@@ -1,4 +1,4 @@
-# wikiviews-api-server
+# Wikiviews api-server
 The api-server for the wikiviews application. It provides access to the analyzed and indexed [Wikipedia Pageviews](https://dumps.wikimedia.org/other/pageviews/) data via an RESTful API.
 
 Therefor it uses an ElasticSearch Cluster to store, index and query the data. The ElasticSearch backend can be created with [wikiviews-elasticsearch](https://github.com/Wikiviews/wikiviews-elasticsearch) and provisioned with the [wikiviews-importer](https://github.com/Wikiviews/wikiviews-importer)

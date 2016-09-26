@@ -21,78 +21,50 @@ The server gets configured via the following environment variables:
 * `ES_INDEX`: ElasticSearch index for the application data (Default: `pageviews`, matches the setup provided by [wikiviews-importer](https://github.com/Wikiviews/wikiviews-importer))
 * `ES_TYPE`: ElasticSearch type for the article data (Default: `article`, matches the setup provided by [wikiviews-importer](https://github.com/Wikiviews/wikiviews-importer))
 
-
 ### Backend setup
 The setup for the ElasticSearch backend is described in [wikiviews-elasticsearch](https://github.com/Wikiviews/wikiviews-elasticsearch)
 
-### Testing, Building, Debugging and Running
-The project uses NPM as build system. Before you run any of the defined scripts, make sure you ran `npm install`.
-
-The following targets are available:
-#### `clean`
-Removes all build files.
+### Run with Docker
+#### Using the official image
+The project provides a [Docker image in the Docker Hub](https://hub.docker.com/r/wikiviews/wikiviews-api-server/). You can download this image with
 ```shell
-npm run clean
+docker pull wikiviews/wikiviews-api-server
 ```
+This image is automatically generated for each repository tag via [Travis-CI](https://travis-ci.org/Wikiviews/wikiviews-api-server) ([![Build Status](https://travis-ci.org/Wikiviews/wikiviews-api-server.svg?branch=master)](https://travis-ci.org/Wikiviews/wikiviews-api-server)).
 
-#### `flow`
-Typechecks the project with [Flow](https://flowtype.org/). If no Flow server is already running, it starts a new one.
+#### Building your own image
+If you want to include local changes, use your own tag, etc. you can build your own image from this repository.<br>
+To build the Docker image for the Wikiviews Api-Server, run:
 ```shell
-npm run flow
+docker build -t {TAG-NAME} .
 ```
+or use the Docker build targets ([`build:docker`](#builddocker) and [`start:docker`](#startdocker)).
 
-##### `flow:stop`
-Stops a possibly running Flow server.
+#### Running a container
+To run an instance with , execute:
 ```shell
-npm run flow:stop
-```
-
-#### `test`
-Runs unit tests for the project.
-```shell
-npm run test
-```
-##### `test:debug`
-Runs the unit test in a debugger.
-```shell
-npm run test:debug
+docker run -e "{CONFIG_NAME}={CONFIG_VALUE}" -e ... --name {CONTAINER-NAME} -p 80:80 wikiviews/wikiviews-api-server
 ```
 
-##### `test:cover`
-Runs the unit test and generates a coverage report.
+### Running locally
+You can run the server without docker by installing the projects package and using the command
 ```shell
-npm run test:cover
+wv-api-server
 ```
+#### Using the npm package
+The project provides an [NPM package](https://www.npmjs.com/package/@wikiviews/wikiviews-api-server)([![npm version](https://badge.fury.io/js/%40wikiviews%2Fwikiviews-api-server.svg)](https://badge.fury.io/js/%40wikiviews%2Fwikiviews-api-server)), which can be installed via
+```shell
+npm install -g @wikiviews/wikiviews-importer
+```
+This package is automatically generated for each repository tag via [Travis-CI](https://travis-ci.org/Wikiviews/wikiviews-api-server) ([![Build Status](https://travis-ci.org/Wikiviews/wikiviews-api-server.svg?branch=master)](https://travis-ci.org/Wikiviews/wikiviews-api-server)).
 
-#### `build`
-Builds the project. Transpiles all ES6 files and generates the output under `lib`.
-```shell
-npm run build
+#### Building from project sources
+You can also install the package locally by using the project sources. Therefor clone the project and run
 ```
+npm install && npm run build && npm install -g
+```
+inside the project directory.
 
-##### `build:dev`
-Builds the project in development mode. It generates source-maps while transpiling.
-```shell
-npm run build:dev
-```
-
-##### `build:docker`
-Builds the project and a docker container running the server. Make sure, that you have access to a docker daemon.
-```shell
-npm run build:docker
-```
-
-#### `start`
-Builds the project and runs it locally. The server is configured with the currently set environment variables.
-```shell
-npm run start
-```
-
-##### `start:docker`
-Builds the project and a docker runs the container. The server is configured with the currently set environment variables.
-```shell
-npm run start:docker
-```
 ## API 
 The API-Server uses a RESTful API to provide the information for the Wikiviews application. The following endpoints are provided:
 
@@ -176,3 +148,72 @@ The server responds with a JSON document with the following structure:
 
 #### Example
 <!-- TODO: Example -->
+
+## Development
+The project uses NPM as build system. Before you run any of the defined scripts, make sure you ran `npm install`.
+
+The following targets are available:
+#### `clean`
+Removes all build files.
+```shell
+npm run clean
+```
+
+#### `flow`
+Typechecks the project with [Flow](https://flowtype.org/). If no Flow server is already running, it starts a new one.
+```shell
+npm run flow
+```
+
+##### `flow:stop`
+Stops a possibly running Flow server.
+```shell
+npm run flow:stop
+```
+
+#### `test`
+Runs unit tests for the project.
+```shell
+npm run test
+```
+##### `test:debug`
+Runs the unit test in a debugger.
+```shell
+npm run test:debug
+```
+
+##### `test:cover`
+Runs the unit test and generates a coverage report.
+```shell
+npm run test:cover
+```
+
+#### `build`
+Builds the project. Transpiles all ES6 files and generates the output under `lib`.
+```shell
+npm run build
+```
+
+##### `build:dev`
+Builds the project in development mode. It generates source-maps while transpiling.
+```shell
+npm run build:dev
+```
+
+##### `build:docker`
+Builds the project and a docker container running the server. Make sure, that you have access to a docker daemon.
+```shell
+npm run build:docker
+```
+
+#### `start`
+Builds the project and runs it locally. The server is configured with the currently set environment variables.
+```shell
+npm run start
+```
+
+##### `start:docker`
+Builds the project and a docker runs the container. The server is configured with the currently set environment variables.
+```shell
+npm run start:docker
+```

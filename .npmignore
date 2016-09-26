@@ -1,0 +1,10 @@
+coverage/**
+node_modules/**
+doc/**
+src/**
+test/**
+.babelrc
+.flowconfig
+.gitignore
+.travis.yml
+Dockerfile

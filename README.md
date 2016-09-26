@@ -9,10 +9,10 @@ The server gets configured via environment variables and can be started locally 
 ### Configuration
 The server gets configured via the following environment variables:
 * `HTTP`: If set, a HTTP server will be provided
-    * `HTTP_PORT`: The port, on which the HTTP server listens (Default: `8080`)
+    * `HTTP_PORT`: The port, on which the HTTP server listens (Default: `80`)
     * `SERVER_ADDR`: The address, on which the HTTP server listens (Default: every local address)
 * `HTTPS`: If set, a HTTPS server will be provided
-    * `HTTPS_PORT`: The port, on which the HTTPS server listens (Default: `8443`)
+    * `HTTPS_PORT`: The port, on which the HTTPS server listens (Default: `443`)
     * `SERVER_ADDR`: The address, on which the HTTPS server listens (Default: every local address, identical to the `HTTP` server address)
     * `HTTPS_CERT`: Path to the SSL certificate (mandatory, when using HTTPS)
     * `HTTPS_KEY`: Path to the SSL private key (mandatory, when using HTTPS)

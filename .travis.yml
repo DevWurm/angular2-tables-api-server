@@ -1,6 +1,9 @@
+sudo: required
+services:
+  - docker
 language: node_js
 node_js:
-- '6'
+  - '6'
 env:
   global:
   - REPO="wikiviews/wikiviews-elasticsearch"
@@ -9,8 +12,8 @@ env:
   - secure: OLdTAlmIIsx0XizCCGu2HuDdiKNOxuu4Zqb/s/wfjnAjBlPzj7Ucke8f92Q4zrdMiGlWKbDRhKYQcQuM8ZP9J6MfF8nS7iioi1KHmlnYcsmZ5Rv8E520mMdPyta2r5WQRY2jB7Z/dweysxOjDkKyup1NyGFsxQ6I4+/6L9Q68optcvDZN8BZ5AziaXEXTMFEUpZKS+lOXMi0Fk2NNAk+NOVcIkT1QBPxPJuEY3QlhU2dLVyB14KhnQxFuyxAzf0FKJJ6Qd9mkGqdDU5LDADWRY3vHjfRTk/14+TZGyXUGQT72O6CvmzqbbFq7C5WLCIEe4FdeP3WFhmZEjKDIGAy+Lf2C0lD++toWH33jSiHrZ2+Tnoyzzh6/f6DSNL2G0GoVH+QVlrgk7/nOsvHSmOdkhW3bVdsGk2gWtsnL8IrASBAKTAO0MAu4KLTSgIyJNCyF7o9feJItawMDKgIhEXhgnR2N9ejRh3dbXYkPl6tUeYQaqJrFgxtwRlG1WG0yQKWfPwYhfidztJ60RnU2ALaB6qqhcWhfPKdyPlJNdmEqGHqFqZf2oU2xDtSE7ezkVE6FcaZy3855uBouC8EUOALb2Jf+gADYDoRFq+5+wYlIVYnZ907+6V7/wZtxTItOEW0KnK84AelnhRs71eIc9rAnZXoMumPoLZ4beXmxQzXTBc=
 before_script: npm run build
 after_success:
-- "./build/travis-ci.build.sh"
-- "./build/travis-ci.deploy.sh"
+  - "./build/travis-ci.build.sh"
+  - "./build/travis-ci.deploy.sh"
 deploy:
   provider: npm
   email: wikiviews@devwurm.net

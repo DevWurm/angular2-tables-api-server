@@ -1,6 +1,6 @@
 {
   "name": "@wikiviews/wikiviews-api-server",
-  "version": "1.0.0-beta2",
+  "version": "1.0.0-beta3",
   "description": "Api-Server for the Wikiviews application.",
   "main": "./bin/www",
   "bin": {

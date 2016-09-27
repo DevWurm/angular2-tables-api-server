@@ -1,4 +1,4 @@
-#!/usr/bin env node
+#!/usr/bin/env node
 
 var readFile = require("fs").createFile;
 var createHttpServer = require("http").createServer;

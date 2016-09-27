@@ -18,7 +18,7 @@ The server gets configured via the following environment variables:
     * `HTTPS_KEY`: Path to the SSL private key (mandatory, when using HTTPS)
 * `ES_ADDR`: ElasticSearch address (Default: `localhost`)
 * `ES_PORT`: ElasticSearch port (Default: `9200`)
-* `ES_INDEX`: ElasticSearch index for the application data (Default: `pageviews`, matches the setup provided by [wikiviews-importer](https://github.com/Wikiviews/wikiviews-importer))
+* `ES_INDEX`: ElasticSearch index for the application data (Default: `wikiviews`, matches the setup provided by [wikiviews-importer](https://github.com/Wikiviews/wikiviews-importer))
 * `ES_TYPE`: ElasticSearch type for the article data (Default: `article`, matches the setup provided by [wikiviews-importer](https://github.com/Wikiviews/wikiviews-importer))
 
 ### Backend setup
